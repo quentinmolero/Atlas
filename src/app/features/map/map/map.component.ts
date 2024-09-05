@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
 import {environment} from "../../../../environments/environment";
+import {WaypointService} from "../../../services/waypoint.service";
 
 @Component({
   selector: 'app-map',
@@ -22,10 +23,19 @@ export class MapComponent implements OnInit {
       accessToken: environment.mapbox.accessToken,
       container: 'map',
       style: this.style,
-      zoom: 4,
+      zoom: 5,
       center: [this.longitude, this.latitude]
     });
-    this.map.addControl(new mapboxgl.NavigationControl());
-  }
+    //this.map.addControl(new mapboxgl.NavigationControl());
 
+    WaypointService.getAllWaypoint()
+      .then(waypoints => waypoints.forEach(waypoint => {
+        if (this.map instanceof mapboxgl.Map) {
+          new mapboxgl.Marker()
+            .setLngLat([waypoint.longitude, waypoint.latitude])
+            .setPopup(new mapboxgl.Popup().setHTML(`<p>${waypoint.name}</p>`))
+            .addTo(this.map)
+        }
+      }));
+  }
 }
