@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
-import {environment} from "../../../../environments/environment";
-import {WaypointService} from "../../../services/waypoint.service";
+import {environment} from "../../../environments/environment";
+import {WaypointService} from "../../services/waypoint.service";
 
 @Component({
   selector: 'app-map',
