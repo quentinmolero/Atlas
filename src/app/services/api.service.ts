@@ -11,4 +11,20 @@ export class ApiService {
       .then(res => res.json())
       .catch(err => console.log(err));
   }
+
+  public static getCallStatus(url: string): Promise<number> {
+    return fetch(environment.apiUrl + url, {
+      mode: 'cors',
+      headers: {
+        'Access-Control-Allow-Origin':'*',
+      }
+    })
+      .then(res => {
+        return res.status;
+      })
+      .catch(err => {
+        console.log(err);
+        return err.status;
+      });
+  }
 }
