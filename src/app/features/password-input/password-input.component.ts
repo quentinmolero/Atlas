@@ -13,12 +13,27 @@ import {AuthService} from "../../services/auth.service";
 })
 export class PasswordInputComponent {
   @ViewChild('passwordInput', {static: true}) passwordInput!: ElementRef;
+  @ViewChild('passwordStatusTag', {static: true}) passwordStatusTag!: ElementRef;
 
   login(event?: MouseEvent) {
     const password = this.passwordInput.nativeElement.value;
     AuthService.login(password)
       .then(result => {
-        console.log(result);
+        if (result === true) {
+          this.setPasswordStatus('Valid', 'password-input-status-tag-valid');
+        } else {
+          this.setPasswordStatus('Invalid', 'password-input-status-tag-invalid');
+        }
       });
+  }
+
+  setPasswordStatus(status: string, statusClass: string) {
+    this.passwordStatusTag.nativeElement.innerText = status;
+
+    const statusTagClassList = this.passwordStatusTag.nativeElement.classList;
+    statusTagClassList.forEach((statusTagClass: string) => {
+      this.passwordStatusTag.nativeElement.classList.remove(statusTagClass);
+    });
+    this.passwordStatusTag.nativeElement.classList.add(statusClass);
   }
 }
