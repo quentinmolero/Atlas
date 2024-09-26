@@ -1,0 +1,46 @@
+.waypoint-list {
+  padding-bottom: 0;
+  margin: 0 4px;
+  width: 25%;
+  min-width: 300px;
+  max-width: 800px;
+  border-radius: 12px 12px 0 0;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 3;
+  background: #ffffff;
+}
+.waypoint-list-head {
+  display: flex;
+  justify-content: space-around;
+  margin: 8px;
+  cursor: pointer;
+}
+.waypoint-list-button {
+  padding: 0;
+  margin: 0;
+  font-size: x-large;
+  font-weight: bolder;
+  color: #696969;
+}
+.waypoint-list-button-hidden {
+  display: none;
+}
+.waypoint-list-separator {
+  height: 1px;
+  width: 96%;
+  background-color: black;
+  margin: 0 auto;
+  padding: 0;
+}
+.waypoint-list-body {
+  height: 85vh;
+  overflow: auto;
+}
+.waypoint-list-body-collapsed {
+  display: none;
+}
+.waypoint-list-element {
+  margin: 8px 12px;
+}
