@@ -1,4 +1,4 @@
-import {Waypoint} from "../core/waypoint";
+import {Waypoint} from "../../core/waypoint";
 import {ApiService} from "./api.service";
 
 export class WaypointService {
