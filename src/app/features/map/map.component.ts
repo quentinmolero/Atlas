@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
 import {environment} from "../../../environments/environment";
 import {WaypointService} from "../../services/api/waypoint.service";
+import {WaypointsService} from "../../services/waypoint/waypoints.service";
+import {Waypoint} from "../../core/waypoint";
 
 @Component({
   selector: 'app-map',
@@ -11,12 +13,19 @@ import {WaypointService} from "../../services/api/waypoint.service";
   styleUrl: './map.component.css'
 })
 export class MapComponent implements OnInit {
-  map: mapboxgl.Map | undefined;
-  style = 'mapbox://styles/mapbox/outdoors-v12';
-  latitude = 46.85;
-  longitude = 2.34;
+  private map: mapboxgl.Map | undefined;
+  private style = 'mapbox://styles/mapbox/outdoors-v12';
+  private latitude = 46.85;
+  private longitude = 2.34;
+  private waypointList: Waypoint[] = [];
 
-  constructor() { }
+  constructor(
+    private waypointsState: WaypointsService,
+  ) {
+    waypointsState.event.subscribe(event => {
+      this.waypointList = event;
+    })
+  }
 
   ngOnInit(): void {
     this.map = new mapboxgl.Map({
@@ -29,13 +38,17 @@ export class MapComponent implements OnInit {
     //this.map.addControl(new mapboxgl.NavigationControl());
 
     WaypointService.getAllWaypoint()
-      .then(waypoints => waypoints.forEach(waypoint => {
-        if (this.map instanceof mapboxgl.Map) {
-          new mapboxgl.Marker()
-            .setLngLat([waypoint.longitude, waypoint.latitude])
-            .setPopup(new mapboxgl.Popup().setHTML(`<p>${waypoint.name}</p>`))
-            .addTo(this.map)
-        }
-      }));
+      .then(waypoints => {
+        this.waypointList = waypoints;
+        this.waypointsState.publish(this.waypointList);
+        waypoints.forEach(waypoint => {
+          if (this.map instanceof mapboxgl.Map) {
+            new mapboxgl.Marker()
+              .setLngLat([waypoint.longitude, waypoint.latitude])
+              .setPopup(new mapboxgl.Popup().setHTML(`<p>${waypoint.name}</p>`))
+              .addTo(this.map)
+          }
+        })
+      });
   }
 }
