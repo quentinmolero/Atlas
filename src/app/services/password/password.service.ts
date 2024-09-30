@@ -5,7 +5,7 @@ import {Password} from "../../core/password";
 @Injectable({
   providedIn: 'root'
 })
-export class PasswordServiceService {
+export class PasswordService {
   public password = new Subject<Password>();
   public event = this.password.asObservable();
 

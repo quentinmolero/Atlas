@@ -9,7 +9,7 @@ export class ApiService {
       }
     })
       .then(res => res.json())
-      .catch(err => console.log(err));
+      .catch(err => console.error(err));
   }
 
   public static getCallStatus(url: string): Promise<number> {
@@ -23,7 +23,7 @@ export class ApiService {
         return res.status;
       })
       .catch(err => {
-        console.log(err);
+        console.error(err);
         return err.status;
       });
   }

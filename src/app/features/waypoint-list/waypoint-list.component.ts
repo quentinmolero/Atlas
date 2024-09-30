@@ -22,7 +22,6 @@ export class WaypointListComponent {
     @Inject(DOCUMENT) private document: Document
   ) {
     this.waypointsService.event.subscribe(event => {
-      console.log(event);
       event.forEach(waypoint => {
         this.renderer.appendChild(this.waypointList.nativeElement, this.createWaypointLabelElement(waypoint.name.toString()))
       })
@@ -55,7 +54,6 @@ export class WaypointListComponent {
     const waypointLabel = this.document.createElement('p');
     waypointLabel.textContent = waypointName;
     waypointLabel.classList.add('waypoint-list-element')
-    console.log(waypointLabel);
     return waypointLabel;
   }
 }

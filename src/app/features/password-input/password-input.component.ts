@@ -2,6 +2,8 @@ import {Component, ElementRef, ViewChild} from '@angular/core';
 import {FormsModule} from "@angular/forms";
 import {AuthService} from "../../services/api/auth.service";
 import {LoginPopupServiceService} from "../../services/display/login-popup-service.service";
+import {PasswordService} from "../../services/password/password.service";
+import {Password} from "../../core/password";
 
 @Component({
   selector: 'app-password-input',
@@ -18,10 +20,10 @@ export class PasswordInputComponent {
   @ViewChild('passwordStatusTag', {static: true}) passwordStatusTag!: ElementRef;
 
   constructor(
-    private loginPopupService: LoginPopupServiceService
+    private loginPopupService: LoginPopupServiceService,
+    private passwordService: PasswordService
   ) {
     loginPopupService.event.subscribe(event => {
-      console.log(event);
       if (event) {
         this.passwordInputPopup.nativeElement.classList.remove('password-input-holder-hidden');
         this.passwordInputPopup.nativeElement.classList.add('password-input-holder');
@@ -42,6 +44,10 @@ export class PasswordInputComponent {
       .then(result => {
         if (result === true) {
           this.setPasswordStatus('Valid', 'password-input-status-tag-valid');
+          setTimeout(() => {
+            this.loginPopupService.publish(false);
+            this.passwordService.publish(new Password(password, result))
+          })
         } else {
           this.setPasswordStatus('Invalid', 'password-input-status-tag-invalid');
         }

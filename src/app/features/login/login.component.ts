@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import {Component, ElementRef, ViewChild} from '@angular/core';
 import {LoginPopupServiceService} from "../../services/display/login-popup-service.service";
+import {PasswordService} from "../../services/password/password.service";
 
 @Component({
   selector: 'app-login',
@@ -10,12 +11,19 @@ import {LoginPopupServiceService} from "../../services/display/login-popup-servi
 })
 export class LoginComponent {
   private isPopupDisplayed = false;
+  @ViewChild('loginButton', {static: true}) loginButton!: ElementRef;
 
   constructor(
-    private loginPopupState: LoginPopupServiceService
+    private loginPopupState: LoginPopupServiceService,
+    private passwordState: PasswordService,
   ) {
     loginPopupState.event.subscribe(event => {
       this.isPopupDisplayed = event;
+    });
+    passwordState.event.subscribe(event => {
+      if (event.isValid) {
+        this.loginButton.nativeElement.classList.add('login-hidden');
+      }
     })
   }
 

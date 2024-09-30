@@ -6,7 +6,9 @@
   right: 4%;
   z-index: 1;
 }
-
+.login-hidden {
+  display: none;
+}
 .login p{
   height: 100%;
   width: 100%;
