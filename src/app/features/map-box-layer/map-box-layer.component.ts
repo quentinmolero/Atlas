@@ -1,7 +1,6 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
 import {PasswordInputComponent} from "../password-input/password-input.component";
 import {LoginPopupServiceService} from "../../services/display/login-popup-service.service";
-import {PasswordService} from "../../services/password/password.service";
 
 @Component({
   selector: 'app-map-box-layer',
@@ -20,11 +19,11 @@ export class MapBoxLayerComponent {
   ) {
     loginPopupService.event.subscribe(event => {
       if (event) {
-        this.passwordInputPopup.nativeElement.classList.remove('password-input-holder-hidden');
-        this.passwordInputPopup.nativeElement.classList.add('password-input-holder');
+        this.passwordInputPopup.nativeElement.classList.remove('map-box-layer-hidden');
+        this.passwordInputPopup.nativeElement.classList.add('map-box-layer');
       } else {
-        this.passwordInputPopup.nativeElement.classList.remove('password-input-holder');
-        this.passwordInputPopup.nativeElement.classList.add('password-input-holder-hidden');
+        this.passwordInputPopup.nativeElement.classList.remove('map-box-layer');
+        this.passwordInputPopup.nativeElement.classList.add('map-box-layer-hidden');
       }
     })
   }
