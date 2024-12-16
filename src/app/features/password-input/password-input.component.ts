@@ -15,7 +15,6 @@ import {Password} from "../../core/password";
   styleUrl: './password-input.component.css'
 })
 export class PasswordInputComponent {
-  @ViewChild('passwordInputPopup', {static: true}) passwordInputPopup!: ElementRef;
   @ViewChild('passwordInput', {static: true}) passwordInput!: ElementRef;
   @ViewChild('passwordStatusTag', {static: true}) passwordStatusTag!: ElementRef;
 
@@ -23,15 +22,6 @@ export class PasswordInputComponent {
     private loginPopupService: LoginPopupServiceService,
     private passwordService: PasswordService
   ) {
-    loginPopupService.event.subscribe(event => {
-      if (event) {
-        this.passwordInputPopup.nativeElement.classList.remove('password-input-holder-hidden');
-        this.passwordInputPopup.nativeElement.classList.add('password-input-holder');
-      } else {
-        this.passwordInputPopup.nativeElement.classList.remove('password-input-holder');
-        this.passwordInputPopup.nativeElement.classList.add('password-input-holder-hidden');
-      }
-    })
   }
 
   closePopup() {
