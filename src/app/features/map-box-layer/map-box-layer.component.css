@@ -16,3 +16,9 @@
 .map-box-layer-hidden {
   display: none;
 }
+.password-input-box-hidden {
+  display: none;
+}
+.location-input-box-hidden {
+  display: none;
+}

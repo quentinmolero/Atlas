@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
+import {Component} from '@angular/core';
 import {AddLocationPopupServiceService} from "../../services/display/add-location-popup-service.service";
 
 @Component({
@@ -8,15 +8,9 @@ import {AddLocationPopupServiceService} from "../../services/display/add-locatio
   templateUrl: './location-input.component.html',
   styleUrl: './location-input.component.css'
 })
-export class LocationInputComponent implements AfterViewInit {
-  @ViewChild('locationInputBox', {static: true}) locationInputBox!: ElementRef;
-
+export class LocationInputComponent {
   constructor(
     private _addLocationPopupService: AddLocationPopupServiceService,
   ) {
-  }
-
-  ngAfterViewInit() {
-    this._addLocationPopupService.setAddLocationPopup(this.locationInputBox);
   }
 }

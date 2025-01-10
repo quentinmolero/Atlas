@@ -16,6 +16,8 @@ import {AddLocationPopupServiceService} from "../../services/display/add-locatio
 })
 export class MapBoxLayerComponent {
   @ViewChild('mapboxLayer', {static: true}) mapboxLayer!: ElementRef;
+  @ViewChild('passwordInputPopup', {static: true}) passwordInputPopup!: ElementRef;
+  @ViewChild('locationInputBox', {static: true}) locationInputPopup!: ElementRef;
 
   constructor(
     loginPopupService: LoginPopupServiceService,
@@ -24,19 +26,19 @@ export class MapBoxLayerComponent {
     loginPopupService.event.subscribe(event => {
       if (event) {
         this.showMapboxLayer();
-        loginPopupService.getPasswordInputPopup().nativeElement.classList.remove('password-input-box-hidden');
+        this.passwordInputPopup.nativeElement.classList.remove('password-input-box-hidden');
       } else {
         this.hideMapboxLayer();
-        loginPopupService.getPasswordInputPopup().nativeElement.classList.add('password-input-box-hidden');
+        this.passwordInputPopup.nativeElement.classList.add('password-input-box-hidden');
       }
     });
     addLocationPopupService.event.subscribe(event => {
       if (event) {
         this.showMapboxLayer();
-        addLocationPopupService.getAddLocationPopup().nativeElement.classList.remove('location-input-box-hidden');
+        this.locationInputPopup.nativeElement.classList.remove('location-input-box-hidden');
       } else {
         this.hideMapboxLayer();
-        addLocationPopupService.getAddLocationPopup().nativeElement.classList.add('location-input-box-hidden');
+        this.locationInputPopup.nativeElement.classList.add('location-input-box-hidden');
       }
     });
   }
