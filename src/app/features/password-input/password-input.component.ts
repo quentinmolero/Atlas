@@ -1,4 +1,4 @@
-import {Component, ElementRef, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
 import {FormsModule} from "@angular/forms";
 import {AuthService} from "../../services/api/auth.service";
 import {LoginPopupServiceService} from "../../services/display/login-popup-service.service";
@@ -14,7 +14,7 @@ import {Password} from "../../core/password";
   templateUrl: './password-input.component.html',
   styleUrl: './password-input.component.css'
 })
-export class PasswordInputComponent {
+export class PasswordInputComponent implements AfterViewInit {
   @ViewChild('passwordInputPopup', {static: true}) passwordInputPopup!: ElementRef;
   @ViewChild('passwordInput', {static: true}) passwordInput!: ElementRef;
   @ViewChild('passwordStatusTag', {static: true}) passwordStatusTag!: ElementRef;
