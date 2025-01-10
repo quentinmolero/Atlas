@@ -5,26 +5,36 @@ import {LoginPopupServiceService} from "../../services/display/login-popup-servi
 @Component({
   selector: 'app-map-box-layer',
   standalone: true,
-    imports: [
-        PasswordInputComponent
-    ],
+  imports: [
+    PasswordInputComponent
+  ],
   templateUrl: './map-box-layer.component.html',
   styleUrl: './map-box-layer.component.css'
 })
 export class MapBoxLayerComponent {
-  @ViewChild('passwordInputPopup', {static: true}) passwordInputPopup!: ElementRef;
+  @ViewChild('mapboxLayer', {static: true}) mapboxLayer!: ElementRef;
 
   constructor(
-    private loginPopupService: LoginPopupServiceService,
+    loginPopupService: LoginPopupServiceService,
   ) {
     loginPopupService.event.subscribe(event => {
       if (event) {
-        this.passwordInputPopup.nativeElement.classList.remove('map-box-layer-hidden');
-        this.passwordInputPopup.nativeElement.classList.add('map-box-layer');
+        this.showMapboxLayer();
+        loginPopupService.getPasswordInputPopup().nativeElement.classList.remove('password-input-box-hidden');
       } else {
-        this.passwordInputPopup.nativeElement.classList.remove('map-box-layer');
-        this.passwordInputPopup.nativeElement.classList.add('map-box-layer-hidden');
+        this.hideMapboxLayer();
+        loginPopupService.getPasswordInputPopup().nativeElement.classList.add('password-input-box-hidden');
       }
-    })
+    });
+  }
+
+  showMapboxLayer() {
+    this.mapboxLayer.nativeElement.classList.remove('map-box-layer-hidden');
+    this.mapboxLayer.nativeElement.classList.add('map-box-layer');
+  }
+
+  hideMapboxLayer() {
+    this.mapboxLayer.nativeElement.classList.remove('map-box-layer');
+    this.mapboxLayer.nativeElement.classList.add('map-box-layer-hidden');
   }
 }

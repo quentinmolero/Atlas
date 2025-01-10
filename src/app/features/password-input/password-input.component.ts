@@ -15,6 +15,7 @@ import {Password} from "../../core/password";
   styleUrl: './password-input.component.css'
 })
 export class PasswordInputComponent {
+  @ViewChild('passwordInputPopup', {static: true}) passwordInputPopup!: ElementRef;
   @ViewChild('passwordInput', {static: true}) passwordInput!: ElementRef;
   @ViewChild('passwordStatusTag', {static: true}) passwordStatusTag!: ElementRef;
 
@@ -32,7 +33,7 @@ export class PasswordInputComponent {
     const password = this.passwordInput.nativeElement.value;
     AuthService.login(password)
       .then(result => {
-        if (result === true) {
+        if (result) {
           this.setPasswordStatus('Valid', 'password-input-status-tag-valid');
           setTimeout(() => {
             this.loginPopupService.publish(false);
@@ -52,5 +53,9 @@ export class PasswordInputComponent {
       this.passwordStatusTag.nativeElement.classList.remove(statusTagClass);
     });
     this.passwordStatusTag.nativeElement.classList.add(statusClass);
+  }
+
+  ngAfterViewInit() {
+    this.loginPopupService.setPasswordInputPopup(this.passwordInputPopup);
   }
 }
