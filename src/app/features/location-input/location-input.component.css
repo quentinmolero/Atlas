@@ -1,0 +1,45 @@
+.location-input-box {
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  border-radius: 8px;
+  gap: 8px;
+  min-width: 340px;
+  width: 40vw;
+}
+.location-input-head {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  justify-content: space-between;
+}
+.location-input-head input {
+  width: 80%;
+}
+.location-input-body {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  min-height: 280px;
+  height: 40vh;
+}
+.location-input-list {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  background: #f0f0f0;
+  border-radius: 8px;
+}
+.location-input-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: gray;
+  width: 50%;
+}
+.location-input-foot {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+}
