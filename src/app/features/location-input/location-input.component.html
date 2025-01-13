@@ -1,6 +1,6 @@
 <div class="location-input-box">
   <div class="location-input-head">
-    <input placeholder="Enter city to continue..." />
+    <input placeholder="Enter city to continue..." [ngModel]="searchText" (ngModelChange)="onInputChange($event)" />
     <button>X</button>
   </div>
   <div class="location-input-body">
