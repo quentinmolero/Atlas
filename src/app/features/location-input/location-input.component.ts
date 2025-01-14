@@ -1,10 +1,9 @@
-import {Component, ElementRef, Inject, OnInit, Renderer2, ViewChild, ViewContainerRef} from '@angular/core';
+import {Component, ComponentRef, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
 import {AddLocationPopupServiceService} from "../../services/display/add-location-popup-service.service";
 import {FormsModule} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 import {debounceTime, distinctUntilChanged, Observable, Subject, switchMap} from "rxjs";
-import {DOCUMENT} from "@angular/common";
 import {LocationInputItemComponent} from "../location-input-item/location-input-item.component";
 
 @Component({
@@ -19,14 +18,22 @@ import {LocationInputItemComponent} from "../location-input-item/location-input-
 export class LocationInputComponent implements OnInit{
   public searchText: string = "";
   private searchTerms = new Subject<string>();
+  private locationItems: ComponentRef<LocationInputItemComponent>[] = [];
   @ViewChild('locationList', {read: ViewContainerRef}) locationList!: ViewContainerRef;
 
   constructor(
-    private _addLocationPopupService: AddLocationPopupServiceService,
-    private http: HttpClient,
-    private renderer: Renderer2,
-    @Inject(DOCUMENT) private document: Document
+    private addLocationPopupService: AddLocationPopupServiceService,
+    private http: HttpClient
   ) {
+    this.addLocationPopupService.selectLocationItemEvent.subscribe(event => {
+      this.locationItems.forEach(location => {
+        if (location.instance === event) {
+          location.instance.setSelectedStyle();
+        } else {
+          location.instance.resetSelectedStyle();
+        }
+      });
+    });
   }
 
   public onInputChange(text: string): void {
@@ -46,11 +53,12 @@ export class LocationInputComponent implements OnInit{
       switchMap((term: string): Observable<any> => this.searchLocation(term))
     ).subscribe(results => {
       this.locationList.clear();
+      this.locationItems = [];
       results.features.forEach((feature: any) => {
-        console.log(feature);
         const locationItem = this.locationList.createComponent(LocationInputItemComponent);
         locationItem.instance.placeName = feature.text;
         locationItem.instance.locationNameWithCountry = feature.place_name;
+        this.locationItems.push(locationItem);
       });
     });
   }

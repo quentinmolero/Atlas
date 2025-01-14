@@ -4,6 +4,16 @@
   background: #ffffff;
   border-radius: 8px;
   padding: 8px 12px;
+  cursor: pointer;
+}
+.location-input-item-selected {
+  display: flex;
+  flex-direction: column;
+  background: #f3faff;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  border: 1px solid #64b5f6;
 }
 .location-input-item-title {
   font-weight: 600;
