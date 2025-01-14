@@ -11,6 +11,8 @@ import {AddLocationPopupServiceService} from "../../services/display/add-locatio
 export class LocationInputItemComponent {
   @Input() placeName: string = "City name";
   @Input() locationNameWithCountry: string = "City name, country";
+  @Input() latitude: number = 0;
+  @Input() longitude: number = 0;
   @ViewChild('locationItem', {static: true}) locationItem!: ElementRef;
 
   constructor(
