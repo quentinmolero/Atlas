@@ -7,4 +7,13 @@ export class WaypointService {
 
     return data.map((item: any) => new Waypoint(item.name, item.latitude, item.longitude));
   }
+
+  public static async addWaypoint(waypoint: Waypoint, password: string): Promise<void> {
+    await ApiService.sendPostToAPI("/waypoint", {
+      id: null,
+      name: waypoint.name,
+      latitude: waypoint.latitude,
+      longitude: waypoint.longitude,
+    }, password);
+  }
 }

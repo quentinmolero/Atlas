@@ -6,6 +6,9 @@ import {environment} from "../../../environments/environment";
 import {debounceTime, distinctUntilChanged, Observable, Subject, switchMap} from "rxjs";
 import {LocationInputItemComponent} from "../location-input-item/location-input-item.component";
 import {NgOptimizedImage} from "@angular/common";
+import {Waypoint} from "../../core/waypoint";
+import {WaypointService} from "../../services/api/waypoint.service";
+import {PasswordService} from "../../services/password/password.service";
 
 @Component({
   selector: 'app-location-input',
@@ -21,17 +24,21 @@ export class LocationInputComponent implements OnInit{
   public searchText: string = "";
   private searchTerms = new Subject<string>();
   private locationItems: ComponentRef<LocationInputItemComponent>[] = [];
+  private selectedLocation: LocationInputItemComponent | undefined;
   @ViewChild('locationList', {read: ViewContainerRef}) locationList!: ViewContainerRef;
   @ViewChild('staticLocationText', {static: true}) staticLocationText!: ElementRef;
   @ViewChild('staticLocationImage', {static: true}) staticLocationImage!: ElementRef;
+  @ViewChild('addLocationButton', {static: true}) addLocationButton!: ElementRef;
 
   constructor(
     private addLocationPopupService: AddLocationPopupServiceService,
+    private passwordService: PasswordService,
     private http: HttpClient
   ) {
     this.addLocationPopupService.selectLocationItemEvent.subscribe(event => {
       this.staticLocationText.nativeElement.classList.add('location-input-preview-hidden');
       this.staticLocationImage.nativeElement.classList.remove('location-input-preview-hidden');
+      this.addLocationButton.nativeElement.disabled = false;
       this.staticLocationImage.nativeElement.src = `https://api.mapbox.com/styles/v1/mapbox/outdoors-v12/static/pin-l-embassy+f74e4e(${event.longitude},${event.latitude})/${event.longitude},${event.latitude},3,0,0/400x400?access_token=${environment.mapbox.accessToken}`;
       this.locationItems.forEach(location => {
         if (location.instance === event) {
@@ -40,6 +47,7 @@ export class LocationInputComponent implements OnInit{
           location.instance.resetSelectedStyle();
         }
       });
+      this.selectedLocation = event;
     });
   }
 
@@ -62,7 +70,6 @@ export class LocationInputComponent implements OnInit{
       this.locationList.clear();
       this.locationItems = [];
       results.features.forEach((feature: any) => {
-        console.log(feature);
         const locationItem = this.locationList.createComponent(LocationInputItemComponent);
         locationItem.instance.placeName = feature.text;
         locationItem.instance.locationNameWithCountry = feature.place_name;
@@ -75,5 +82,17 @@ export class LocationInputComponent implements OnInit{
 
   search(term: string): void {
     this.searchTerms.next(term);
+  }
+
+  closeLocationInput() {
+    this.addLocationPopupService.publish(false);
+  }
+
+  addLocation() {
+    console.log(this.selectedLocation);
+    if (this.selectedLocation !== undefined) {
+      const waypoint = new Waypoint(this.selectedLocation.placeName, this.selectedLocation.latitude, this.selectedLocation.longitude);
+      WaypointService.addWaypoint(waypoint, this.passwordService.getPassword()).then(r => this.closeLocationInput());
+    }
   }
 }
