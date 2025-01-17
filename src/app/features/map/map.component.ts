@@ -24,6 +24,14 @@ export class MapComponent implements OnInit {
   ) {
     waypointsState.event.subscribe(event => {
       this.waypointList = event;
+      this.waypointList.forEach(waypoint => {
+        if (this.map instanceof mapboxgl.Map) {
+          new mapboxgl.Marker()
+            .setLngLat([waypoint.longitude, waypoint.latitude])
+            .setPopup(new mapboxgl.Popup().setHTML(`<p style="margin: 0; padding: 4px 8px;">${waypoint.name}</p>`))
+            .addTo(this.map)
+        }
+      });
     })
   }
 
@@ -37,18 +45,6 @@ export class MapComponent implements OnInit {
     });
     //this.map.addControl(new mapboxgl.NavigationControl());
 
-    WaypointService.getAllWaypoint()
-      .then(waypoints => {
-        this.waypointList = waypoints;
-        this.waypointsState.publish(this.waypointList);
-        waypoints.forEach(waypoint => {
-          if (this.map instanceof mapboxgl.Map) {
-            new mapboxgl.Marker()
-              .setLngLat([waypoint.longitude, waypoint.latitude])
-              .setPopup(new mapboxgl.Popup().setHTML(`<p style="margin: 0; padding: 4px 8px;">${waypoint.name}</p>`))
-              .addTo(this.map)
-          }
-        })
-      });
+    this.waypointsState.loadWaypoints();
   }
 }

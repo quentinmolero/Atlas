@@ -8,6 +8,7 @@ import {LocationInputItemComponent} from "../location-input-item/location-input-
 import {Waypoint} from "../../core/waypoint";
 import {WaypointService} from "../../services/api/waypoint.service";
 import {PasswordService} from "../../services/password/password.service";
+import {WaypointsService} from "../../services/waypoint/waypoints.service";
 
 @Component({
   selector: 'app-location-input',
@@ -31,6 +32,7 @@ export class LocationInputComponent implements OnInit{
   constructor(
     private addLocationPopupService: AddLocationPopupServiceService,
     private passwordService: PasswordService,
+    private waypointsState: WaypointsService,
     private http: HttpClient
   ) {
     this.addLocationPopupService.selectLocationItemEvent.subscribe(event => {
@@ -93,8 +95,12 @@ export class LocationInputComponent implements OnInit{
   addLocation() {
     if (this.selectedLocation !== undefined) {
       const waypoint = new Waypoint(this.selectedLocation.placeName, this.selectedLocation.latitude, this.selectedLocation.longitude);
-      WaypointService.addWaypoint(waypoint, this.passwordService.getPassword()).then(r => this.closeLocationInput());
-      this.resetForm();
+      WaypointService.addWaypoint(waypoint, this.passwordService.getPassword())
+        .then(r => {
+        this.closeLocationInput();
+        this.resetForm();
+        this.waypointsState.loadWaypoints();
+      });
     }
   }
 
