@@ -5,7 +5,6 @@ import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 import {debounceTime, distinctUntilChanged, Observable, Subject, switchMap} from "rxjs";
 import {LocationInputItemComponent} from "../location-input-item/location-input-item.component";
-import {NgOptimizedImage} from "@angular/common";
 import {Waypoint} from "../../core/waypoint";
 import {WaypointService} from "../../services/api/waypoint.service";
 import {PasswordService} from "../../services/password/password.service";
@@ -14,8 +13,7 @@ import {PasswordService} from "../../services/password/password.service";
   selector: 'app-location-input',
   standalone: true,
   imports: [
-    FormsModule,
-    NgOptimizedImage
+    FormsModule
   ],
   templateUrl: './location-input.component.html',
   styleUrl: './location-input.component.css'
@@ -53,7 +51,11 @@ export class LocationInputComponent implements OnInit{
 
   public onInputChange(text: string): void {
     this.searchText = text;
-    this.search(this.searchText);
+    if (this.searchText !== "") {
+      this.search(this.searchText);
+    } else {
+      this.resetForm();
+    }
   }
 
   public searchLocation(location: string): Observable<any> {
@@ -89,10 +91,18 @@ export class LocationInputComponent implements OnInit{
   }
 
   addLocation() {
-    console.log(this.selectedLocation);
     if (this.selectedLocation !== undefined) {
       const waypoint = new Waypoint(this.selectedLocation.placeName, this.selectedLocation.latitude, this.selectedLocation.longitude);
       WaypointService.addWaypoint(waypoint, this.passwordService.getPassword()).then(r => this.closeLocationInput());
+      this.resetForm();
     }
+  }
+
+  resetForm() {
+    this.searchText = "";
+    this.locationItems = [];
+    this.locationList.clear();
+    this.staticLocationText.nativeElement.classList.remove('location-input-preview-hidden');
+    this.staticLocationImage.nativeElement.classList.add('location-input-preview-hidden');
   }
 }

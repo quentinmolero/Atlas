@@ -1,7 +1,7 @@
 <div class="location-input-box">
   <div class="location-input-head">
     <input placeholder="Enter city to continue..." [ngModel]="searchText" (ngModelChange)="onInputChange($event)" />
-    <button (click)="closeLocationInput()">X</button>
+    <button (click)="closeLocationInput()" class="location-input-close">X</button>
   </div>
   <div class="location-input-body">
     <div class="location-input-list">
@@ -10,7 +10,7 @@
     </div>
     <div class="location-input-preview">
       <p #staticLocationText>Select location to see the preview</p>
-      <img class="location-input-preview-img" ngSrc="" #staticLocationImage />
+      <img class="location-input-preview-img" src="" #staticLocationImage />
     </div>
   </div>
   <div class="location-input-foot">
