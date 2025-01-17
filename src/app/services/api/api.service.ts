@@ -31,4 +31,20 @@ export class ApiService {
       .then(res => res.json())
       .catch(err => console.error(err));
   }
+
+  public static sendDeleteToAPI(url: string, password: string): Promise<boolean> {
+    return fetch(`${environment.apiUrl}${url}`, {
+      method: 'delete',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+        'token': password,
+      },
+    })
+      .then(res => res.status === 200)
+      .catch(err => {
+        console.error(err);
+        return false;
+      });
+  }
 }

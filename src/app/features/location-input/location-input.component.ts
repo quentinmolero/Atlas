@@ -94,7 +94,7 @@ export class LocationInputComponent implements OnInit{
 
   addLocation() {
     if (this.selectedLocation !== undefined) {
-      const waypoint = new Waypoint(this.selectedLocation.placeName, this.selectedLocation.latitude, this.selectedLocation.longitude);
+      const waypoint = new Waypoint(null, this.selectedLocation.placeName, this.selectedLocation.latitude, this.selectedLocation.longitude);
       WaypointService.addWaypoint(waypoint, this.passwordService.getPassword())
         .then(r => {
         this.closeLocationInput();

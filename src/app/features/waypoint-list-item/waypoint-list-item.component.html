@@ -3,5 +3,5 @@
     <p class="waypoint-list-item-name">{{ name }}</p>
     <p class="waypoint-list-item-coordinates">{{ latLng }}</p>
   </div>
-  <button class="waypoint-list-item-delete">Supprimer</button>
+  <button #waypointListItemButton class="waypoint-list-item-delete waypoint-list-item-delete-hidden" (click)="deleteWaypoint()">Supprimer</button>
 </div>
