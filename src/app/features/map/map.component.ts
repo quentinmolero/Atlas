@@ -4,6 +4,7 @@ import {environment} from "../../../environments/environment";
 import {WaypointService} from "../../services/api/waypoint.service";
 import {WaypointsService} from "../../services/waypoint/waypoints.service";
 import {Waypoint} from "../../core/waypoint";
+import {MapService} from "../../services/map/map.service";
 
 @Component({
   selector: 'app-map',
@@ -21,6 +22,7 @@ export class MapComponent implements OnInit {
 
   constructor(
     private waypointsState: WaypointsService,
+    private mapService: MapService,
   ) {
     waypointsState.event.subscribe(event => {
       this.waypointList = event;
@@ -32,6 +34,15 @@ export class MapComponent implements OnInit {
             .addTo(this.map)
         }
       });
+    });
+
+    mapService.event.subscribe(event => {
+      if (this.map instanceof mapboxgl.Map) {
+        this.map.flyTo({
+          center: [event.longitude, event.latitude],
+          essential: true,
+        });
+      }
     })
   }
 

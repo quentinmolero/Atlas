@@ -9,6 +9,7 @@
 .waypoint-list-item-body {
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 }
 .waypoint-list-item-name {
   margin: 0;

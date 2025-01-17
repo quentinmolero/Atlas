@@ -22,6 +22,7 @@ export class WaypointListComponent {
     this.waypointsService.event.subscribe(waypoints => {
       waypoints.forEach(waypoint => {
         const waypointItem = this.waypointList.createComponent(WaypointListItemComponent);
+        waypointItem.instance.waypoint = waypoint;
         waypointItem.instance.id = waypoint.id!.toString();
         waypointItem.instance.name = waypoint.name.toString();
         waypointItem.instance.latLng = `${waypoint.latitude}, ${waypoint.longitude}`;
