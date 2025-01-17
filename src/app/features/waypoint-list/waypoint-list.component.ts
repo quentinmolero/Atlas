@@ -1,7 +1,6 @@
-import {Component, ElementRef, Inject, Renderer2, ViewChild} from '@angular/core';
-import {Waypoint} from "../../core/waypoint";
+import {Component, ElementRef, ViewChild, ViewContainerRef} from '@angular/core';
 import {WaypointsService} from "../../services/waypoint/waypoints.service";
-import {DOCUMENT} from "@angular/common";
+import {WaypointListItemComponent} from "../waypoint-list-item/waypoint-list-item.component";
 
 @Component({
   selector: 'app-waypoint-list',
@@ -12,18 +11,19 @@ import {DOCUMENT} from "@angular/common";
 })
 export class WaypointListComponent {
   private isExpanded = false;
-  @ViewChild('waypointList', {static: true}) waypointList!: ElementRef;
+  @ViewChild('waypointList', {read: ViewContainerRef}) waypointList!: ViewContainerRef;
+  @ViewChild('waypointListContainer', {static: true}) waypointListContainer!: ElementRef;
   @ViewChild('waypointListExpand', {static: true}) waypointListExpand!: ElementRef;
   @ViewChild('waypointListCollapse', {static: true}) waypointListCollapse!: ElementRef;
 
   constructor(
     private waypointsService: WaypointsService,
-    private renderer: Renderer2,
-    @Inject(DOCUMENT) private document: Document
   ) {
-    this.waypointsService.event.subscribe(event => {
-      event.forEach(waypoint => {
-        this.renderer.appendChild(this.waypointList.nativeElement, this.createWaypointLabelElement(waypoint.name.toString()))
+    this.waypointsService.event.subscribe(waypoints => {
+      waypoints.forEach(waypoint => {
+        const waypointItem = this.waypointList.createComponent(WaypointListItemComponent);
+        waypointItem.instance.name = waypoint.name.toString();
+        waypointItem.instance.latLng = `${waypoint.latitude}, ${waypoint.longitude}`;
       })
     })
   }
@@ -40,20 +40,13 @@ export class WaypointListComponent {
     this.isExpanded = true;
     this.waypointListExpand.nativeElement.classList.add('waypoint-list-button-hidden');
     this.waypointListCollapse.nativeElement.classList.remove('waypoint-list-button-hidden');
-    this.waypointList.nativeElement.classList.remove('waypoint-list-body-collapsed');
+    this.waypointListContainer.nativeElement.classList.remove('waypoint-list-body-collapsed');
   }
 
   collapseList() {
     this.isExpanded = false;
     this.waypointListExpand.nativeElement.classList.remove('waypoint-list-button-hidden');
     this.waypointListCollapse.nativeElement.classList.add('waypoint-list-button-hidden');
-    this.waypointList.nativeElement.classList.add('waypoint-list-body-collapsed');
-  }
-
-  createWaypointLabelElement(waypointName: string):HTMLElement {
-    const waypointLabel = this.document.createElement('p');
-    waypointLabel.textContent = waypointName;
-    waypointLabel.classList.add('waypoint-list-element')
-    return waypointLabel;
+    this.waypointListContainer.nativeElement.classList.add('waypoint-list-body-collapsed');
   }
 }

@@ -28,7 +28,7 @@ export class MapComponent implements OnInit {
         if (this.map instanceof mapboxgl.Map) {
           new mapboxgl.Marker()
             .setLngLat([waypoint.longitude, waypoint.latitude])
-            .setPopup(new mapboxgl.Popup().setHTML(`<p style="margin: 0; padding: 4px 8px;">${waypoint.name}</p>`))
+            .setPopup(new mapboxgl.Popup().setHTML(`<p style="margin: 0; padding: 8px 8px 4px 8px;">${waypoint.name}</p>`))
             .addTo(this.map)
         }
       });
